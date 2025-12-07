@@ -1,116 +1,439 @@
+Here’s the full updated HTML with the slideshow already integrated. Replace the contents of your midnight-highrise.html file with this:
+
+xml
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Midnight Highrise – Level Breakdown</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midnight Highrise – Level Breakdown</title>
     <style>
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background-color: #0d1117;
-            color: #cbd5e1;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
             line-height: 1.6;
+            overflow-x: hidden;
         }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 32px 20px 64px;
+
+        /* Navigation */
+        nav {
+            background: rgba(15, 23, 42, 0.95);
+            padding: 1rem 2rem;
+            border-bottom: 2px solid #38bdf8;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
         }
-        h1, h2 {
+
+        nav a {
             color: #38bdf8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
         }
-        h1 {
-            font-size: 2.2rem;
-            margin-bottom: 0.5rem;
+
+        nav a:hover {
+            color: #0284c7;
         }
-        h2 {
-            font-size: 1.4rem;
-            margin-top: 2rem;
-            margin-bottom: 0.5rem;
-            border-bottom: 1px solid #1f2933;
-            padding-bottom: 0.25rem;
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
         }
-        .subtitle {
-            color: #94a3b8;
+
+        /* Slideshow Container */
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 3rem auto;
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid #38bdf8;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(56, 189, 248, 0.3), inset 0 0 40px rgba(56, 189, 248, 0.05);
+        }
+
+        .slide {
+            display: none;
+            padding: 4rem;
+            min-height: 500px;
+            animation: fadeIn 0.6s ease-in-out;
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(2, 6, 23, 0.9) 100%);
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide h2 {
+            font-size: 2.5rem;
+            color: #38bdf8;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .slide h3 {
+            font-size: 1.5rem;
+            color: #38bdf8;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .slide p {
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .slide ul {
+            list-style: none;
+            margin-left: 0;
             margin-bottom: 1rem;
         }
-        .meta {
-            color: #64748b;
-            font-size: 0.95rem;
-            margin-bottom: 2rem;
+
+        .slide ul li {
+            color: #cbd5e1;
+            margin-bottom: 0.75rem;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 1.05rem;
         }
-        ul {
-            margin-left: 1.25rem;
-            margin-top: 0.5rem;
-        }
-        li {
-            margin-bottom: 0.25rem;
-        }
-        a {
+
+        .slide ul li:before {
+            content: "▸";
             color: #38bdf8;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .slide-title-slide {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #020617 0%, #0f172a 100%);
+            min-height: 600px;
+        }
+
+        .slide-title-slide h1 {
+            font-size: 3.5rem;
+            color: #38bdf8;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+        }
+
+        .slide-title-slide .subtitle {
+            font-size: 1.8rem;
+            color: #cbd5e1;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .slide-title-slide .meta {
+            color: #94a3b8;
+            font-size: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background: rgba(15, 23, 42, 0.95);
+            border-top: 1px solid #38bdf8;
+        }
+
+        button {
+            background: #38bdf8;
+            color: #0f172a;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #0284c7;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(56, 189, 248, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .slide-counter {
+            color: #cbd5e1;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 3px;
+            background: #334155;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #38bdf8 0%, #0284c7 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Content Section */
+        .content-section {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-left: 4px solid #38bdf8;
+            border-radius: 8px;
+        }
+
+        .content-section h3 {
+            color: #38bdf8;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section p {
+            color: #cbd5e1;
+            line-height: 1.8;
+        }
+
+        /* Back Link */
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid #38bdf8;
+            border-radius: 6px;
+            color: #38bdf8;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: rgba(56, 189, 248, 0.2);
+            transform: translateX(-4px);
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 2rem;
+                min-height: 400px;
+            }
+
+            .slide h2 {
+                font-size: 1.8rem;
+            }
+
+            .slide-title-slide h1 {
+                font-size: 2.5rem;
+            }
+
+            .slideshow-container {
+                margin: 1rem;
+            }
+
+            button {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
+    <nav>
+        <a href="https://tonygrollmes.github.io/portfolio.html">← Back to Portfolio</a>
+    </nav>
+
     <div class="container">
-        <h1>Midnight Highrise</h1>
-        <p class="subtitle">A Neon-Soaked Parkour Escape</p>
-        <p class="meta">Level Design • First-Person Parkour • Unreal Engine<br>By Tony Grollmes • December 2025</p>
+        <!-- Slideshow -->
+        <div class="slideshow-container">
+            <!-- Slide 1: Title -->
+            <div class="slide active slide-title-slide">
+                <h1>Midnight Highrise</h1>
+                <p class="subtitle">A Neon-Soaked Parkour Escape</p>
+                <p style="color: #94a3b8; margin-bottom: 0;">Level Design • First-Person Parkour • Unreal Engine</p>
+                <p class="meta">Tony Grollmes • December 2025</p>
+            </div>
 
-        <h2>Level Story & Setting</h2>
-        <p>A dense, neon-soaked city during a heavy nighttime rainstorm. The player wakes in a cramped basement maintenance room beneath a corporate district and must ascend through hidden service corridors, rooftops, and high-rise buildings to reach the Skyline Tower rooftop before security systems lock down.</p>
-        <ul>
-            <li>Emphasizes verticality and constant upward movement.</li>
-            <li>Mixture of tight interior passages and exposed rooftop segments.</li>
-            <li>Wall-running and wall-clinging as core survival tools.</li>
-        </ul>
+            <!-- Slide 2: Level Story & Setting -->
+            <div class="slide">
+                <h2>Level Story & Setting</h2>
+                <p>A dense, neon-soaked city during a heavy nighttime rainstorm. The player wakes in a cramped basement maintenance room beneath a corporate district and must ascend through hidden service corridors, rooftops, and high-rise buildings to reach the Skyline Tower rooftop before security systems lock down.</p>
+                <ul>
+                    <li>Emphasizes verticality and constant upward movement</li>
+                    <li>Mixture of tight interior passages and exposed rooftop segments</li>
+                    <li>Wall-running and wall-clinging as core survival tools</li>
+                </ul>
+            </div>
 
-        <h2>Objectives</h2>
-        <p><strong>Primary Objective</strong>: Escape the basement and reach the Skyline Tower rooftop using parkour movement.</p>
-        <p><strong>Optional Challenges</strong>:</p>
-        <ul>
-            <li>Data Collection – Explore risky alternate routes.</li>
-            <li>Time Trial – Complete the run within 3 minutes.</li>
-            <li>Perfect Run – Reach the rooftop with zero deaths from falls.</li>
-        </ul>
+            <!-- Slide 3: Objectives -->
+            <div class="slide">
+                <h2>Objectives</h2>
+                <h3>Primary Objective</h3>
+                <p>Escape the basement and reach Skyline Tower rooftop using parkour movement</p>
+                <h3>Optional Challenges</h3>
+                <ul>
+                    <li><strong>Data Collection:</strong> Explore risky alternate routes</li>
+                    <li><strong>Time Trial:</strong> Complete within 3 minutes</li>
+                    <li><strong>Perfect Run:</strong> Zero deaths from falls</li>
+                </ul>
+            </div>
 
-        <h2>Stressors & Challenges</h2>
-        <p><strong>Long-Fall Risk</strong>: Constant fall danger from basement to exposed rooftops; missed jumps result in lethal drops.</p>
-        <p><strong>Hazardous Floors</strong>: Electrified panels and unstable grates push players toward vertical solutions.</p>
-        <p><strong>Soft Time Pressure</strong>: A 3-minute soft timer nudges players toward high-risk shortcuts and aggressive routing.</p>
+            <!-- Slide 4: Stressors & Challenges -->
+            <div class="slide">
+                <h2>Stressors & Challenges</h2>
+                <h3>Long-Fall Risk</h3>
+                <p>Constant threat from basement to exposed rooftops. Missed jumps = lethal drops.</p>
+                <h3>Hazardous Floors</h3>
+                <p>Electrified panels and unstable grates force vertical movement.</p>
+                <h3>Time Pressure</h3>
+                <p>3-minute soft timer pushes toward high-risk shortcuts and aggressive routing.</p>
+            </div>
 
-        <h2>Level Progression & Pacing</h2>
-        <ul>
-            <li><strong>Lower Level</strong>: Basic jumps, introductory wall-runs, short clings (low intensity).</li>
-            <li><strong>Street Rooftops</strong>: Longer gaps, first major fall exposure, light branching (moderate intensity).</li>
-            <li><strong>Rooftop Cluster</strong>: Chained sequences, layered hazards, high consequences (high intensity).</li>
-            <li><strong>Skyline Tower</strong>: The hardest sequences and final climb to rooftop (climactic intensity).</li>
-        </ul>
+            <!-- Slide 5: Level Progression & Pacing -->
+            <div class="slide">
+                <h2>Level Progression & Pacing</h2>
+                <ul>
+                    <li><strong>Lower Level:</strong> Basic jumps, intro wall-runs, short clings (Low intensity)</li>
+                    <li><strong>Street Rooftops:</strong> Longer gaps, first fall exposure, branching (Moderate intensity)</li>
+                    <li><strong>Rooftop Cluster:</strong> Chained sequences, layered hazards, high consequences (High intensity)</li>
+                    <li><strong>Skyline Tower:</strong> Hardest sequences and final climb to rooftop (Climactic intensity)</li>
+                </ul>
+            </div>
 
-        <h2>Custom Level Mechanics</h2>
-        <p><strong>Wall-Run</strong>: Horizontal runs along marked surfaces to cross gaps, bypass hazards, and chain movement between platforms.</p>
-        <p><strong>Wall-Cling</strong>: Short-duration clings after jumps or wall-runs, giving brief pause points for reorientation before losing grip.</p>
+            <!-- Slide 6: Custom Level Mechanics -->
+            <div class="slide">
+                <h2>Custom Level Mechanics</h2>
+                <h3>Wall-Run</h3>
+                <p>Horizontal runs along marked surfaces to cross gaps, bypass hazards, and chain movement between platforms.</p>
+                <h3>Wall-Cling</h3>
+                <p>Short-duration clings after jumps or wall-runs, giving brief pause points for reorientation before losing grip.</p>
+            </div>
 
-        <h2>Visual Direction</h2>
-        <ul>
-            <li>Neon, vertical, and rainy night atmosphere.</li>
-            <li>High-contrast cityscape with bright signage cutting through the dark.</li>
-            <li>Glowing billboards and wet reflective rooftops to reinforce height and risk.</li>
-            <li>Stacked architecture that pushes extreme sense of depth and verticality.</li>
-        </ul>
+            <!-- Slide 7: Visual Direction -->
+            <div class="slide">
+                <h2>Visual Direction</h2>
+                <ul>
+                    <li>Neon. Vertical. Rainy.</li>
+                    <li>High-contrast cityscape with bright signage cutting through the dark</li>
+                    <li>Glowing billboards and wet reflective rooftops to reinforce height and risk</li>
+                    <li>Stacked architecture that pushes extreme sense of depth and verticality</li>
+                    <li>Cyberpunk-inspired atmosphere with fast, tense pacing</li>
+                </ul>
+            </div>
 
-        <h2>Design Inspiration</h2>
-        <ul>
-            <li><strong>Prince of Persia</strong> – Parkour mechanics, wall-clinging, and vertical progression.</li>
-            <li><strong>Titanfall 2</strong> – High-speed wall-running and neon urban energy.</li>
-        </ul>
+            <!-- Slide 8: Design Inspiration -->
+            <div class="slide">
+                <h2>Design Inspiration</h2>
+                <h3>Prince of Persia: Sands of Time</h3>
+                <p>Parkour mechanics, wall-clinging, and vertical progression define the core movement language.</p>
+                <h3>Titanfall 2</h3>
+                <p>Wall-running, neon urban aesthetic, and high-speed movement create intensity and flow.</p>
+            </div>
 
-        <h2>Ready to Ascend?</h2>
-        <p>Midnight Highrise is designed as a focused vertical parkour challenge that blends precise movement, route risk-reward, and a tense neon-soaked escape fantasy.</p>
+            <!-- Slide 9: Closing -->
+            <div class="slide slide-title-slide">
+                <h1 style="margin-bottom: 2rem;">Ready to Ascend?</h1>
+                <p style="color: #cbd5e1; font-size: 1.3rem;">Midnight Highrise: A vertical parkour challenge through neon-lit danger</p>
+            </div>
 
-        <p><a href="portfolio.html">&larr; Back to portfolio</a></p>
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <button onclick="previousSlide()">← Previous</button>
+                <span class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">9</span></span>
+                <button onclick="nextSlide()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Additional Content -->
+        <div class="content-section">
+            <h3>Level Design Portfolio</h3>
+            <p>This project showcases focused vertical parkour level design with emphasis on player progression, risk-reward systems, and atmospheric worldbuilding. The neon-soaked aesthetic creates tension while the mechanical depth of wall-running and wall-clinging offers engaging moment-to-moment gameplay.</p>
+            <a href="https://tonygrollmes.github.io/portfolio.html" class="back-link">← Back to Portfolio</a>
+        </div>
     </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[n].classList.add('active');
+            
+            document.getElementById('currentSlide').textContent = n + 1;
+            
+            const progress = ((n + 1) / totalSlides) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            showSlide(currentSlide);
+        }
+
+        function previousSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            showSlide(currentSlide);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+        });
+
+        // Initialize
+        document.getElementById('totalSlides').textContent = totalSlides;
+        showSlide(0);
+    </script>
 </body>
 </html>
